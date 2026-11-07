@@ -40,16 +40,30 @@ Restart-Service sshd
 
 if ($TunnelToken) {
     Write-Host '3) cloudflared (tunel servisi)' -ForegroundColor Cyan
-    if (-not (Get-Command cloudflared -ErrorAction SilentlyContinue)) { winget install --id Cloudflare.cloudflared -e --accept-source-agreements --accept-package-agreements }
+    if (-not (Get-Command cloudflared -ErrorAction SilentlyContinue)) {
+        if (Get-Command winget -ErrorAction SilentlyContinue) { winget install --id Cloudflare.cloudflared -e --accept-source-agreements --accept-package-agreements }
+        else {
+            # Windows Server'da winget genelde yok: GitHub'daki resmi MSI (cloudflare/cloudflared)
+            [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+            $msi = Join-Path $env:TEMP 'cloudflared-windows-amd64.msi'
+            Invoke-WebRequest 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.msi' -OutFile $msi -UseBasicParsing
+            $p = Start-Process msiexec.exe -ArgumentList '/i', "`"$msi`"", '/qn', '/norestart' -Wait -PassThru
+            if ($p.ExitCode -ne 0) { throw "cloudflared MSI kurulumu basarisiz (kod $($p.ExitCode))." }
+            Remove-Item $msi -ErrorAction SilentlyContinue
+        }
+    }
     $cf = (Get-Command cloudflared -ErrorAction SilentlyContinue).Source
     if (-not $cf) { $cf = Get-ChildItem 'C:\Program Files*\cloudflared\cloudflared.exe' | Select-Object -First 1 -ExpandProperty FullName }
+    if (-not $cf) { throw 'cloudflared bulunamadi; kurulumu kontrol edip betigi tekrar calistirin.' }
     & $cf service install $TunnelToken
 }
 
 Write-Host '4) GitHub deploy key (salt okunur)' -ForegroundColor Cyan
 New-Item -ItemType Directory -Force 'C:\River\.ssh' | Out-Null
 $gk = 'C:\River\.ssh\github_deploy'
-if (-not (Test-Path $gk)) { ssh-keygen -t ed25519 -f $gk -N '""' -C 'river-portal-server' | Out-Null }
+# Bos parola: PS 5.1 / 7.0-7.2 (Legacy) bos dizeyi atlar, '""' gerekir; PS 7.3+ (Standard/Windows) '""'yu iki tirnak parola yapar, '' gerekir
+$noPass = if ((Get-Variable PSNativeCommandArgumentPassing -ValueOnly -ErrorAction SilentlyContinue) -in 'Standard', 'Windows') { '' } else { '""' }
+if (-not (Test-Path $gk)) { ssh-keygen -t ed25519 -f $gk -N $noPass -C 'river-portal-server' | Out-Null }
 Write-Host 'Bu anahtari GitHub > depo > Settings > Deploy keys > Add (Allow write access KAPALI):' -ForegroundColor Yellow
 Get-Content "$gk.pub"
 Write-Host ''

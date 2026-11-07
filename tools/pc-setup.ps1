@@ -13,7 +13,9 @@ if (-not $cf) { throw 'cloudflared bulunamadi; yeni bir PowerShell penceresinde 
 Write-Host '2) Dagitim anahtari' -ForegroundColor Cyan
 $sshDir = Join-Path $env:USERPROFILE '.ssh'; New-Item -ItemType Directory -Force $sshDir | Out-Null
 $key = Join-Path $sshDir 'river_deploy'
-if (-not (Test-Path $key)) { ssh-keygen -t ed25519 -f $key -N '""' -C "$env:USERNAME-river-deploy" | Out-Null }
+# Bos parola: PS 5.1 / 7.0-7.2 (Legacy) bos dizeyi atlar, '""' gerekir; PS 7.3+ (Standard/Windows) '""'yu iki tirnak parola yapar, '' gerekir
+$noPass = if ((Get-Variable PSNativeCommandArgumentPassing -ValueOnly -ErrorAction SilentlyContinue) -in 'Standard', 'Windows') { '' } else { '""' }
+if (-not (Test-Path $key)) { ssh-keygen -t ed25519 -f $key -N $noPass -C "$env:USERNAME-river-deploy" | Out-Null }
 
 Write-Host '3) SSH yapilandirmasi' -ForegroundColor Cyan
 $conf = Join-Path $sshDir 'config'

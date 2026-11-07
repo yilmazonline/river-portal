@@ -41,10 +41,10 @@ Bilgisayar (Claude Code)  ── git push ──►  GitHub (özel depo)
    - Service: **SSH**, URL: `localhost:22`
 
    Cloudflare `deploy.folyazilim.com` DNS kaydını kendisi oluşturur.
-3. **Hizmet jetonu:** Access › Service Auth › **Service Tokens** › Create: ad `river-claude-code`. **Client ID** ve **Client Secret**'ı kopyala; Secret yalnız bir kez gösterilir.
+3. **Hizmet jetonu:** Access › Service Auth › **Service Tokens** › Create: ad `river-portal-code`. **Client ID** ve **Client Secret**'ı kopyala; Secret yalnız bir kez gösterilir.
 4. **Uygulama:** Access › **Applications** › Add › **Self-hosted**:
    - Ad: `River Portal Deploy`, Domain: `deploy.folyazilim.com`.
-   - Policy: Action **Service Auth**, Include › **Service Token** = `river-claude-code`.
+   - Policy: ad `portal jeton`, Action **Service Auth**, Include › **Service Token** = `river-portal-code`.
    - İstersen ikinci bir policy: Action **Allow**, Include › Emails = `yilmaz.guney@river.com.tr` (tarayıcıdan e-posta koduyla giriş için yedek yol).
 
 ## C. Sunucu (bir kez, RDP ile, PowerShell YÖNETİCİ)
@@ -54,6 +54,15 @@ Bilgisayar (Claude Code)  ── git push ──►  GitHub (özel depo)
    ```powershell
    Set-ExecutionPolicy -Scope Process Bypass -Force
    C:\River\server-setup.ps1 -PublicKey "ssh-ed25519 AAAA... " -TunnelToken "eyJ..."
+   ```
+   `winget` yoksa (Windows Server'da genelde yok) betik cloudflared'i GitHub'daki resmi MSI ile kurar.
+
+   **Git ve PATH:** Uzak komutlar (`git pull`, `deploy.ps1`) SSH oturumunda çalışır ve sshd ortam değişkenlerini **yalnız başlarken** okur. Git'i kur (https://git-scm.com/download/win), `C:\Program Files\Git\cmd` sistem PATH'inde olsun; Git'i kurduktan ya da PATH'i değiştirdikten sonra **sshd'yi yeniden başlat**. Yapılmazsa `ssh river-deploy git --version` "git tanınmıyor" der.
+   ```powershell
+   $gp = 'C:\Program Files\Git\cmd'
+   $mp = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+   if (($mp -split ';') -notcontains $gp) { [Environment]::SetEnvironmentVariable('Path', "$mp;$gp", 'Machine') }
+   Restart-Service sshd
    ```
 3. Sonunda gösterilen **GitHub deploy key**'i GitHub › `river-portal` › Settings › **Deploy keys** › Add key'e ekle (**Allow write access kapalı**).
 4. Depoyu sunucuya klonla:
@@ -109,6 +118,7 @@ Veritabanı değişikliği varsa `.\tools\remote.ps1 migrate` ayrıca onay ister
   - **Jeton okunmuyor olabilir:** Hizmet jetonu ortam değişkenleri yeni pencerede yüklenir; PowerShell'i kapatıp yeniden aç. Hâlâ olmuyorsa `%USERPROFILE%\.ssh\config` içindeki ProxyCommand satırına jetonu doğrudan ekle: `--service-token-id <ID> --service-token-secret <SECRET>`. Bu dosya deponun dışında.
   - **Access policy'yi kontrol et:** Action **Service Auth** olmalı ve jeton eklenmiş olmalı.
 - **"Permission denied (publickey)":** Sunucuda `C:\ProgramData\ssh\administrators_authorized_keys` dosyasında genel anahtarın olduğunu ve SSH kullanıcısının **yönetici** olduğunu kontrol et; `Restart-Service sshd`.
+- **SSH oturumunda `git` tanınmıyor:** Git sistem PATH'inde değil ya da PATH değiştikten sonra sshd yeniden başlatılmadı (bkz. C.2); sunucuda `Restart-Service sshd`.
 - **`git pull` başarısız:** Sunucuda `git -C C:\River\portal pull`'u elle dene; deploy key GitHub'da ekli mi?
 - **Mac'ten:** `brew install cloudflared`; aynı `~/.ssh/config` girdisi ProxyCommand'de `cloudflared` yoluyla çalışır. `remote.ps1` yerine eşdeğer `ssh river-deploy "..."` komutları kullanılabilir (derleme kontrolü sunucuda yapılır).
 

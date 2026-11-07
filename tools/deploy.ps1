@@ -20,7 +20,8 @@ foreach ($f in $secretFiles) {
     if (-not (Test-Path $t)) {
         $s = Join-Path $src $f
         if (-not (Test-Path $s)) { throw "$f ne canlida ne depoda var. Ornek dosyadan olusturun." }
-        if (-not $DryRun) { Copy-Item $s $t }; Write-Host "Ilk gecis: $f canliya yerlestirildi" -ForegroundColor Yellow
+        if ($DryRun) { Write-Host "Ilk gecis: $f canliya yerlestirilecek" -ForegroundColor Yellow }
+        else { Copy-Item $s $t; Write-Host "Ilk gecis: $f canliya yerlestirildi" -ForegroundColor Yellow }
     }
 }
 
