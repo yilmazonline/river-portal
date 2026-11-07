@@ -1,4 +1,4 @@
-// Bilgi tabani yonetimi: pano, kayitlar, ice aktarma (KbAction.ashx)
+﻿// Bilgi tabani yonetimi: pano, kayitlar, ice aktarma (KbAction.ashx)
 (function () {
   var root = document.getElementById('kb'); if (!root) return;
   var $ = function (id) { return document.getElementById(id); }, ENT = null, DAYS = 30;

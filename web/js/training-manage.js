@@ -1,4 +1,4 @@
-// Egitim Icerik Yonetimi: arama, suzme ve siralama (tarayicida; sayfa yenilenmez). Durum oturum boyunca korunur.
+﻿// Egitim Icerik Yonetimi: arama, suzme ve siralama (tarayicida; sayfa yenilenmez). Durum oturum boyunca korunur.
 (function () {
   var tb = document.querySelector('#tmTable tbody'); if (!tb) return;
   var rows = [].slice.call(tb.querySelectorAll('tr[data-i]')); if (!rows.length) return;

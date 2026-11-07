@@ -1,4 +1,4 @@
-// Destek talebi formu: River AI icin talep gonderilmeden once bilgi tabanindan AI on yaniti.
+﻿// Destek talebi formu: River AI icin talep gonderilmeden once bilgi tabanindan AI on yaniti.
 // Kural: kullaniciyi asla engelleme (her zaman "Beklemeden gonder" / "Cozulmedi, gonder"; hata ya da zaman asiminda dogrudan gonder).
 (function () {
   var form = document.getElementById('tkForm'); if (!form) return;

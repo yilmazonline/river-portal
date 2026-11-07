@@ -1,6 +1,6 @@
 ﻿# River Asistan Portal: yayindan once kontrol. Hata varsa cikis kodu 1.
 #   1) .cs/.ashx/.asax/.js dosyalarinda UTF-8 BOM
-#   2) C# 6+ soz dizimi on taramasi ($"...", ?. , nameof) - sunucu C# 5 derler
+        if ($code -cmatch '(^|[\s(=,+:?])\$"' -or $code -cmatch '\w\?\.\w' -or $code -cmatch '\bnameof\(') { Write-Host ("   C#6+? " + (Rel $_.FullName) + ":" + $i + "  " + $line.Trim()) -ForegroundColor Yellow }
 #   3) aspnet_compiler ile butun sitenin derlenmesi (IIS'in calisma zamaninda yapacagi derlemenin aynisi)
 #   4) node varsa JS soz dizimi
 param([switch]$NoCompile)
