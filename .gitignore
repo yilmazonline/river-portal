@@ -1,0 +1,24 @@
+# --- Gizli ayarlar: ASLA depoya girmez (yalniz sunucuda ve deponun yerel kopyasinda) ---
+web/secrets.config
+web/connectionStrings.config
+*.GERCEK
+*.gercek
+
+# --- Kullanici yuklemeleri ve calisma zamani verisi (canlida yasar, depoda degil) ---
+web/assets/traincovers/
+web/assets/avatars/*
+!web/assets/avatars/presets/
+web/assets/catcovers/
+web/ticketfiles/
+web/forumfiles/
+web/materials/
+web/trainingdocs/
+web/App_Data/
+transfer_data/
+
+# --- Gecici ---
+*.log
+Thumbs.db
+desktop.ini
+.vs/
+node_modules/

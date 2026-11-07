@@ -1,0 +1,2 @@
+# Dosyalar oldugu gibi saklanir (satir sonu ve UTF-8 BOM degistirilmez; C#/JS dosyalarinda BOM zorunlu)
+* -text

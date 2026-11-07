@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<connectionStrings>
+    <add name="Partner"
+         connectionString="Server=RIVERNEXT\SQLEXPRESS;Initial Catalog=PARTNER;Trusted_Connection=False;User ID=KULLANICI;Password=SIFRE;TrustServerCertificate=True;"
+         providerName="System.Data.SqlClient" />
+  </connectionStrings>
