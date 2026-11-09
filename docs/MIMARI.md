@@ -325,6 +325,7 @@ Numaralı dosyalar sırayla ve **bir kez** uygulanır; hepsi tekrar çalıştır
 | `65_leads_competitor_block.sql` | 65 - Lead Merkezi: rakip firma domainleri engelleme listesine (kendi calisanlari elenir; is ortaklari etkilenmez). Idempotent. */ |  |
 | `66_knowledge_base.sql` | 66) BILGI TABANI + DESTEK TALEBI AI ON YANITI | KbAnswers, KbEntries |
 | `67_leads_hitap.sql` | 67) LEAD MERKEZI: HITAP (Ad Bey / Ad Hanim) |  |
+| `68_leads_imza_danisman_sablon.sql` | 68) LEAD MERKEZI: otomatik imza kaldirildi + danisman ilk e-posta sablonu |  |
 | `CLEANUP_golive.sql` | CLEANUP_golive.sql — CANLIYA ALMADAN ÖNCE test verisi temizligi |  |
 | `CLEANUP_support_tickets.sql` | CLEANUP_support_tickets.sql — Su ana kadar girilmis TUM destek taleplerini siler |  |
 | `RESET_intro_all_users.sql` | Karsilama videosunu tum kullanicilara yeniden (bir kez) goster. */ |  |
