@@ -415,7 +415,7 @@
   })();
 
   // ---- Uygulama sürümü (footer) ----
-  var APP_VERSION = 'v2.60.0';
+  var APP_VERSION = 'v2.60.1';
   (function () {
     var f = document.querySelector('.app-footer');
     if (f && !f.querySelector('.app-version')) {

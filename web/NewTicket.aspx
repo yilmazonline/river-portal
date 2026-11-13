@@ -141,7 +141,7 @@
 </div>
 </div>
 
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 <script>
   (function(){
     // Urun secimi: yalniz River AI / River PRO, onceden secili degil. Secime gore uyari; secilmeden gonderilemez.

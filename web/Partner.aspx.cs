@@ -57,6 +57,8 @@ public partial class PartnerPage : Page
         bool en = Culture == "en";
         string ok = Request.QueryString["ok"];
         if (ok == "deal") FlashMsg = en ? "Deal booked on behalf of the partner." : "Anlaşma partner adına kaydedildi.";
+        else if (ok == "dealedit") FlashMsg = en ? "Deal updated." : "Anlaşma güncellendi.";
+        else if (ok == "dealdel") FlashMsg = en ? "Deal deleted." : "Anlaşma silindi.";
         else if (ok == "demo") FlashMsg = en ? "Demo request submitted." : "Demo talebi gönderildi.";
         string err = Request.QueryString["err"];
         if (err == "demotime") FlashErr = en ? "Please pick a weekday between 09:00 and 18:00." : "Lütfen hafta içi ve 09:00 ile 18:00 arası bir saat seçin.";
@@ -357,9 +359,11 @@ public partial class PartnerPage : Page
 
     private string BuildDeals(List<DealRow> deals)
     {
+        bool en = Culture == "en";
+        int cols = IsVendorActing ? 6 : 5;
         if (deals.Count == 0)
-            return "<tr><td colspan=\"5\" style=\"color:var(--muted)\">" +
-                   (Culture == "en" ? "No deals yet." : "Henüz anlaşma yok.") + "</td></tr>";
+            return "<tr><td colspan=\"" + cols + "\" style=\"color:var(--muted)\">" +
+                   (en ? "No deals yet." : "Henüz anlaşma yok.") + "</td></tr>";
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < deals.Count; i++)
@@ -372,8 +376,37 @@ public partial class PartnerPage : Page
             sb.Append("<td class=\"num\">" + Fmt.N0(d.CommissionAmount) + " ₺</td>");
             sb.Append("<td><span class=\"st " + Fmt.DealStClass(d.Status) + "\">" +
                       Fmt.DealStLabel(d.Status, Culture) + "</span></td>");
+            if (IsVendorActing)
+            {
+                // Vendor partner adina: yerinde duzenle (alttaki satir acilir) ve sil
+                sb.Append("<td class=\"dl-acts\"><button type=\"button\" class=\"btn-ghost dl-edit-btn\" data-dl=\"" + d.DealId + "\" aria-expanded=\"false\">" + (en ? "Edit" : "Düzenle") + "</button>");
+                sb.Append("<form method=\"post\" action=\"DeleteOrder.aspx\"><input type=\"hidden\" name=\"id\" value=\"" + d.DealId + "\" /><input type=\"hidden\" name=\"back\" value=\"partner\" />");
+                sb.Append("<button type=\"submit\" class=\"btn-ghost dl-del-btn\">" + (en ? "Delete" : "Sil") + "</button></form></td>");
+            }
             sb.Append("</tr>");
+            if (IsVendorActing) sb.Append(BuildDealEditRow(d, cols));
         }
+        return sb.ToString();
+    }
+
+    // Yerinde duzenleme formu: OrderEdit.aspx'e gonderilir (ciro ve kademe orada yeniden hesaplanir), sonra Partner.aspx'e donulur
+    private string BuildDealEditRow(DealRow d, int cols)
+    {
+        bool en = Culture == "en";
+        CultureInfo inv = CultureInfo.InvariantCulture;
+        StringBuilder sb = new StringBuilder();
+        sb.Append("<tr class=\"dl-edit\" id=\"dl-edit-" + d.DealId + "\" hidden=\"hidden\"><td colspan=\"" + cols + "\">");
+        sb.Append("<form method=\"post\" action=\"OrderEdit.aspx\" class=\"dl-form\">");
+        sb.Append("<input type=\"hidden\" name=\"id\" value=\"" + d.DealId + "\" /><input type=\"hidden\" name=\"back\" value=\"partner\" />");
+        sb.Append("<label><span>" + (en ? "Customer" : "Müşteri") + "</span><input class=\"input\" name=\"customer\" required=\"required\" maxlength=\"200\" value=\"" + Fmt.Enc(d.CustomerName) + "\" /></label>");
+        sb.Append("<label><span>" + (en ? "Title" : "Başlık") + "</span><input class=\"input\" name=\"title\" maxlength=\"200\" value=\"" + Fmt.Enc(d.Title) + "\" /></label>");
+        sb.Append("<label><span>" + (en ? "Amount (₺)" : "Tutar (₺)") + "</span><input class=\"input\" name=\"amount\" inputmode=\"decimal\" required=\"required\" value=\"" + d.Amount.ToString("0", inv) + "\" /></label>");
+        sb.Append("<label><span>" + (en ? "Commission %" : "Hakediş %") + "</span><input class=\"input\" name=\"rate\" inputmode=\"decimal\" value=\"" + d.EffectiveRate.ToString("0.##", inv) + "\" /></label>");
+        sb.Append("<label><span>" + (en ? "Commission (₺)" : "Hakediş (₺)") + "</span><input class=\"input\" name=\"commission\" inputmode=\"decimal\" required=\"required\" value=\"" + d.CommissionAmount.ToString("0", inv) + "\" /></label>");
+        sb.Append("<label><span>" + (en ? "Status" : "Durum") + "</span><select name=\"status\" class=\"input st-select\">" + Fmt.StatusOptions(d.Status, Culture) + "</select></label>");
+        sb.Append("<div class=\"dl-form-acts\"><button type=\"submit\" class=\"btn-cyan\">" + (en ? "Save" : "Kaydet") + "</button>");
+        sb.Append("<button type=\"button\" class=\"btn-ghost dl-cancel\" data-dl=\"" + d.DealId + "\">" + (en ? "Cancel" : "Vazgeç") + "</button></div>");
+        sb.Append("</form></td></tr>");
         return sb.ToString();
     }
 

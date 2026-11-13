@@ -61,6 +61,6 @@
   <div class="card rc-card"><div class="rc-ch"><h3>Sınav sonuçları</h3><span>Tüm denemeler, en yeni üstte</span></div><%= AttemptHtml %></div>
 </div>
 </div>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 </body>
 </html>

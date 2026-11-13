@@ -12,6 +12,19 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/dark.css" />
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/tr.js"></script>
+<style>
+  /* Anlasma defteri: vendor partner adina yerinde duzenle / sil */
+  .dl-acts{text-align:right;white-space:nowrap}
+  .dl-acts form{display:inline;margin:0}
+  .dl-acts .btn-ghost{padding:6px 12px;font-size:12.5px}
+  .dl-del-btn:hover{border-color:rgba(255,99,99,.55);color:#FF8A8A}
+  .dl-edit>td{background:var(--glass-2);border-top:0}
+  .dl-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 12px;align-items:end;padding:6px 0}
+  .dl-form label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+  .dl-form .input{width:100%}
+  .dl-form-acts{display:flex;gap:8px;grid-column:1/-1;justify-content:flex-end}
+  .dl-form-acts button{padding:9px 18px}
+</style>
 </head>
 <body>
 
@@ -242,6 +255,7 @@
           <th data-i18n="th_rate">Oran</th>
           <th data-i18n="th_comm">Hakediş</th>
           <th data-i18n="th_status">Durum</th>
+          <% if (IsVendorActing) { %><th style="text-align:right"><%= Culture == "en" ? "Actions" : "İşlemler" %></th><% } %>
         </tr></thead>
         <tbody><%= DealsHtml %></tbody>
       </table></div>
@@ -315,8 +329,8 @@
 </div>
 </div>
 
-<script src="js/common.js?v=185"></script>
-<script src="js/partner.js?v=6"></script>
+<script src="js/common.js?v=186"></script>
+<script src="js/partner.js?v=7"></script>
 <script>
 (function () {
   var last = null;

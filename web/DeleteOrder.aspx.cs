@@ -29,6 +29,7 @@ public partial class DeleteOrderPage : Page
         }
 
         Repo.DeleteDeal(id, deal.CompanyId, newRevenue, newTierId);
-        Response.Redirect("Orders.aspx?ok=del");
+        // Partner panelindeki defterden silindiyse oraya don
+        Response.Redirect(Request.Form["back"] == "partner" ? "Partner.aspx?ok=dealdel#satislar" : "Orders.aspx?ok=del");
     }
 }

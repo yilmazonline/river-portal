@@ -77,6 +77,6 @@ document.addEventListener('click', function (e) {
   else prompt('Linki kopyalayın:', u);
 });
 </script>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 </body>
 </html>

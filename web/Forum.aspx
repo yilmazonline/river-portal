@@ -133,7 +133,7 @@
 </div>
 </div>
 <script>window.FORUM = { me: <%= MeJson %>, mod: <%= IsMod ? "true" : "false" %>, focus: <%= FocusPost %>, consent: <%= NeedsConsent ? "true" : "false" %> };</script>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 <script src="js/forum.js?v=8"></script>
 </body>
 </html>

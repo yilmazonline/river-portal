@@ -52,6 +52,8 @@ public partial class OrderEditPage : Page
         if (!int.TryParse(Request.Form["id"], out id)) { Response.Redirect("Orders.aspx"); return; }
         DealRow deal = Repo.GetDealById(id);
         if (deal == null) { Response.Redirect("Orders.aspx"); return; }
+        // Partner panelindeki yerinde duzenleme formundan geldiyse sonuc oraya doner
+        bool toPartner = Request.Form["back"] == "partner";
 
         string customer = Request.Form["customer"];
         string title = Request.Form["title"];
@@ -63,7 +65,7 @@ public partial class OrderEditPage : Page
         string amtRaw = Request.Form["amount"];
         if (amtRaw != null) amtRaw = amtRaw.Replace(".", "").Replace(",", ".");
         if (!decimal.TryParse(amtRaw, NumberStyles.Any, CultureInfo.InvariantCulture, out amount) || amount < 0)
-        { Response.Redirect("OrderEdit.aspx?id=" + id + "&err=amount"); return; }
+        { Response.Redirect(toPartner ? "Partner.aspx?err=amount#satislar" : "OrderEdit.aspx?id=" + id + "&err=amount"); return; }
 
         CompanyInfo company = Repo.GetCompany(deal.CompanyId);
         List<Tier> tiers = Repo.GetTiers();
@@ -74,7 +76,7 @@ public partial class OrderEditPage : Page
         string commRaw = Request.Form["commission"];
         if (commRaw != null) commRaw = commRaw.Replace(".", "").Replace(",", ".");
         if (!decimal.TryParse(commRaw, NumberStyles.Any, CultureInfo.InvariantCulture, out commission) || commission < 0)
-        { Response.Redirect("OrderEdit.aspx?id=" + id + "&err=amount"); return; }
+        { Response.Redirect(toPartner ? "Partner.aspx?err=commission#satislar" : "OrderEdit.aspx?id=" + id + "&err=amount"); return; }
 
         TierEngine engine = new TierEngine(tiers);
         // Bu deal'den ONCEKI ciro = mevcut toplam - eski tutar
@@ -114,6 +116,6 @@ public partial class OrderEditPage : Page
             }
         }
 
-        Response.Redirect("Orders.aspx?ok=edit");
+        Response.Redirect(toPartner ? "Partner.aspx?ok=dealedit#satislar" : "Orders.aspx?ok=edit");
     }
 }

@@ -199,7 +199,7 @@
   })(ss[k]); }
 })();
 </script>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 <script>window.VDATA = <%= ChartsJson %>;</script>
 <script src="js/vendor.js?v=3"></script>
 </body>

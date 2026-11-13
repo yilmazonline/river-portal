@@ -186,5 +186,33 @@
     }
   }
 
+  // ---- Anlasma defteri (vendor partner adina): yerinde duzenle / sil ----
+  function dlToggle(id, open) {
+    var row = document.getElementById('dl-edit-' + id), btn = document.querySelector('.dl-edit-btn[data-dl="' + id + '"]');
+    if (!row) return;
+    row.hidden = !open;
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { var f = row.querySelector('input:not([type=hidden])'); if (f) f.focus(); }
+  }
+  var dlEdits = document.querySelectorAll('.dl-edit-btn');
+  for (var de = 0; de < dlEdits.length; de++) {
+    dlEdits[de].addEventListener('click', function () {
+      var id = this.getAttribute('data-dl'), row = document.getElementById('dl-edit-' + id);
+      dlToggle(id, row && row.hidden);
+    });
+  }
+  var dlCancels = document.querySelectorAll('.dl-cancel');
+  for (var dc = 0; dc < dlCancels.length; dc++) {
+    dlCancels[dc].addEventListener('click', function () { dlToggle(this.getAttribute('data-dl'), false); });
+  }
+  var dlDels = document.querySelectorAll('.dl-del-btn');
+  for (var dd = 0; dd < dlDels.length; dd++) {
+    dlDels[dd].addEventListener('click', function (e) {
+      var msg = INIT === 'en' ? 'Delete this deal? Partner revenue and tier will be recalculated. This cannot be undone.'
+                              : 'Bu anlaşma silinsin mi? Partnerin cirosu ve seviyesi yeniden hesaplanır. Bu işlem geri alınamaz.';
+      if (!window.confirm(msg)) e.preventDefault();
+    });
+  }
+
   setLang(INIT);
 })();

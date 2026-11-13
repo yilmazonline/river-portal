@@ -126,6 +126,6 @@
     <div class="fname">Fol Yazılım A.Ş.</div>
   </div>
 </div>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 </body>
 </html>

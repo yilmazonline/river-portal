@@ -95,7 +95,7 @@
 </div>
 </div>
 
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 <script src="js/materials.js?v=5"></script>
 <% if (NewLayout) { %><script src="js/salesmats.js?v=2"></script><% if (IsVendor) { %><script src="js/smadmin.js?v=1"></script><% } %><% } %>
 </body>

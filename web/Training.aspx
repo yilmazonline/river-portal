@@ -379,7 +379,7 @@
   </div>
 </div>
 <script>window.MYRATINGS = <%= MyRatingsJson %>; window.WL = <%= WatchJson %>; window.VIDS = <%= VideosJson %>; window.WL_ME = <%= Auth.UserId %>; window.WL_CANREC = <%= CanEdit ? "true" : "false" %>;</script>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 <script src="js/training.js?v=25"></script>
 <script src="js/acshelf.js?v=9"></script>
 <% if (CanEdit) { %><script src="js/trcats.js?v=7"></script><% } %>

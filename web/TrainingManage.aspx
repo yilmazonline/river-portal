@@ -54,6 +54,6 @@
   </div>
 </div>
 <script src="js/training-manage.js?v=1"></script>
-<script src="js/common.js?v=185"></script>
+<script src="js/common.js?v=186"></script>
 </body>
 </html>
